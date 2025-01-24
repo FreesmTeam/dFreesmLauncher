@@ -118,10 +118,10 @@
 
 <p>Feel free to create a GitHub issue if you find a bug or want to suggest a new feature.</p>
 
-<blockquote>
-  [!CAUTION]
-  Do not mention Freesm Launcher on Prism Launcher Discord, Forum, GitHub, etc. Freesm is a standalone project, taking code base from Prism, and may (in the future) have its own site, Discord, etc.</p>
-</blockquote>
+
+> [!CAUTION]
+> Do not mention Freesm Launcher on Prism Launcher Discord, Forum, GitHub, etc. Freesm is a standalone project, taking code base from Prism, and may (in the future) have its own site, Discord, etc.</p>
+
 
 <h2>Translations</h2>
 
