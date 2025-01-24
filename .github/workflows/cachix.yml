@@ -4,8 +4,13 @@ on:
   check_suite:
     types: [completed]
 jobs:
+  debug-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show check suite event data
+        run: echo "${{ toJson(github.event) }}"
   build-and-cache:
-    if: ${{ github.event.check_suite.app.slug == 'garnix-ci' && github.event.check_suite.conclusion == 'failure' }}
+    if: ${{ github.event.check_suite.conclusion == 'failure' && contains(github.event.check_suite.check_runs.*, 'Evaluate flake.nix') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
