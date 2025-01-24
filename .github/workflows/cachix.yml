@@ -11,7 +11,7 @@ jobs:
       - name: Show check suite event data
         run: echo "${{ toJson(github.event) }}"
   build-and-cache:
-    if: ${{ github.event.check_suite.conclusion == 'failure' && contains(github.event.check_suite.check_runs.*, 'Evaluate flake.nix') }}
+    if: ${{ github.event.check_suite.conclusion == 'failure' && contains(github.event.check_suite.check_runs[*].name, 'Evaluate flake.nix') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,3 +24,4 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - run: nix-build
       - run: nix-shell --run "echo OK"
+
