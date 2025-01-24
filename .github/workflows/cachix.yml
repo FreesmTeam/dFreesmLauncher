@@ -5,7 +5,6 @@ on:
       - completed
 jobs:
   debug-info:
-    if: ${{ github.event.check_run.name == 'Evaluate flake.nix' && github.event.check_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +23,12 @@ jobs:
 
       - name: Print Nix version
         run: nix --version
+
+      - name: Print event data
+        run: 'echo "Event payload: ${{ toJson(github.event) }}"'
+
+      - name: Debug condition
+        run: 'echo "Check name: ${{ github.event.check_run.name }}, conclusion: ${{ github.event.check_run.conclusion }}"'
 
   build-and-cache:
     if: ${{ github.event.check_run.name == 'Evaluate flake.nix' && github.event.check_run.conclusion == 'failure' }}
