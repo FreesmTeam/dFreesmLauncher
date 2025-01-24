@@ -42,5 +42,5 @@ jobs:
         with:
           name: freesmlauncher
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - run: nix-build
+      - run: nix-build | cachix push freesmlauncher
       - run: nix-shell --run "echo OK"
