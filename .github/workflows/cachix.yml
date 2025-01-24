@@ -4,6 +4,8 @@ on:
   check_suite:
     types: [completed]
   workflow_dispatch:
+  push:
+    branches: [feat/cachix-fallback]
 jobs:
   debug-info:
     runs-on: ubuntu-latest
