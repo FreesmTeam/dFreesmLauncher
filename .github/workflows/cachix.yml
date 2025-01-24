@@ -3,6 +3,7 @@ run-name: "Building app for cachix cache"
 on:
   check_suite:
     types: [completed]
+  workflow_dispatch:
 jobs:
   debug-info:
     runs-on: ubuntu-latest
