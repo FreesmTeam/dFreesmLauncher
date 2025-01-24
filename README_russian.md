@@ -8,7 +8,7 @@
   <br />
 
   <p>
-    <strong>Не так уж и "призма", как вы думаете.</strong><br />
+    <strong>Не такая уж и "призма", как вы думаете.</strong><br />
     <div style="display: inline-flex; gap: 1rem;">
       <a href="#" style="text-decoration: none;">
         <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="English" style="height: 20px;"> English
@@ -22,7 +22,7 @@
 
   <p>
     Freesm Launcher — это пользовательский лаунчер для Minecraft, который позволяет легко управлять несколькими установками Minecraft и входить в игру с офлайн-аккаунтом без ограничений.<br />
-    <br />Это <b>форк</b> Prism Launcher и <b>не</b> поддерживается им.
+    <br />Это <b>форк</b> Prism Launcher, который <b>не</b> поддерживается им.
   </p>
 </div>
 
