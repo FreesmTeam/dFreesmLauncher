@@ -303,7 +303,7 @@ endif()
 include(QtVersionlessBackport)
 if(Launcher_QT_VERSION_MAJOR EQUAL 5)
     set(QT_VERSION_MAJOR 5)
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets Concurrent Network Test Xml NetworkAuth)
+    find_package(Qt5 REQUIRED COMPONENTS Core Widgets Concurrent Network Test Xml NetworkAuth Svg)
 
     if(NOT Launcher_FORCE_BUNDLED_LIBS)
         find_package(QuaZip-Qt5 1.3 QUIET)
@@ -349,7 +349,7 @@ endif()
 
 if(NOT Launcher_FORCE_BUNDLED_LIBS)
     # Find toml++
-    find_package(tomlplusplus 3.2.0 QUIET)
+    find_package(tomlplusplus 3.4.0 QUIET)
 
     # Find ghc_filesystem
     find_package(ghc_filesystem QUIET)
