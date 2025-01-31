@@ -52,7 +52,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04-Dead_End
+          - os: ubuntu-20.04
+            name: "Ubuntu-20.04-Dead_End"
             qt_ver: 5
             qt_host: linux
             qt_arch: ""
@@ -60,7 +61,8 @@ jobs:
             qt_modules: "qtnetworkauth"
             args: "--base https://download.qt.io/new_archive/qt/5.6/5.6.3"
 
-          - os: ubuntu-20.04-Legacy
+          - os: ubuntu-20.04
+            name: "Ubuntu-20.04-Legacy"
             qt_ver: 5
             qt_host: linux
             qt_arch: ""
@@ -69,6 +71,7 @@ jobs:
             args: ""
 
           - os: ubuntu-20.04
+            name: "Ubuntu-20.04"
             qt_ver: 6
             qt_host: linux
             qt_arch: ""
