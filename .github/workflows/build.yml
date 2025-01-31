@@ -656,57 +656,54 @@ jobs:
       # UPLOAD BUILDS
       ##
 
-      - name: Upload binary tarball (macOS)
+      # Upload artifact for macOS (ZIP file)
+      - name: Upload artifact (macOS)
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
-          name: FreesmLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name || runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}
           path: FreesmLauncher.zip
 
-      - name: Upload binary zip (Windows)
+      # Upload artifacts for Windows
+      - name: Upload binary ZIP (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: FreesmLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name || runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_DIR }}/**
 
-      - name: Upload binary zip (Windows, portable)
+      - name: Upload portable ZIP (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: FreesmLauncher-${{ matrix.name }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name || runner.os }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_PORTABLE_DIR }}/**
 
       - name: Upload installer (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: FreesmLauncher-${{ matrix.name }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name || runner.os }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
           path: FreesmLauncher-Setup.exe
 
-      - name: Upload binary tarball (Linux, portable, Qt 5)
-        if: runner.os == 'Linux' && matrix.qt_ver != 6
+      # Upload portable tarball for Linux
+      - name: Upload portable tarball (Linux)
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
-          name: FreesmLauncher-${{ runner.os }}-Qt5-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ runner.os }}-Qt${{ matrix.qt_ver }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
           path: FreesmLauncher-portable.tar.gz
 
-      - name: Upload binary tarball (Linux, portable, Qt 6)
-        if: runner.os == 'Linux' && matrix.qt_ver != 5
-        uses: actions/upload-artifact@v4
-        with:
-          name: FreesmLauncher-${{ runner.os }}-Qt6-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: FreesmLauncher-portable.tar.gz
-
+      # Additional Linux artifacts for Qt6 builds
       - name: Upload AppImage (Linux)
-        if: runner.os == 'Linux' && matrix.qt_ver != 5
+        if: runner.os == 'Linux' && matrix.qt_ver == '6'
         uses: actions/upload-artifact@v4
         with:
           name: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
           path: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
 
       - name: Upload AppImage Zsync (Linux)
-        if: runner.os == 'Linux' && matrix.qt_ver != 5
+        if: runner.os == 'Linux' && matrix.qt_ver == '6'
         uses: actions/upload-artifact@v4
         with:
           name: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage.zsync
