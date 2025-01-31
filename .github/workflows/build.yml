@@ -58,6 +58,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
+            args: "--mirror https://download.qt.io/new_archive/qt"
 
           - os: ubuntu-20.04-Legacy
             qt_ver: 5
@@ -65,6 +66,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.15.2"
             qt_modules: "qtnetworkauth"
+            args: ""
 
           - os: ubuntu-20.04
             qt_ver: 6
@@ -72,6 +74,7 @@ jobs:
             qt_arch: ""
             qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MinGW-w64-Dead_End"
@@ -82,6 +85,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
+            args: "--mirror https://download.qt.io/new_archive/qt"
 
           - os: windows-2022
             name: "Windows-MinGW-w64-Legacy"
@@ -92,6 +96,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.15.2"
             qt_modules: "qtnetworkauth"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MinGW-w64"
@@ -102,6 +107,7 @@ jobs:
             qt_arch: ""
             qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MSVC-Dead_End"
@@ -115,6 +121,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: "--mirror https://download.qt.io/new_archive/qt"
 
           - os: windows-2022
             name: "Windows-MSVC-Legacy"
@@ -128,6 +135,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MSVC"
@@ -141,6 +149,7 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MSVC-arm64-Dead_End"
@@ -154,6 +163,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: "--mirror https://download.qt.io/new_archive/qt"
 
           - os: windows-2022
             name: "Windows-MSVC-arm64-Legacy"
@@ -167,6 +177,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: ""
 
           - os: windows-2022
             name: "Windows-MSVC-arm64"
@@ -180,6 +191,7 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+            args: ""
 
           - os: macos-14
             name: macOS-Legacy-Dead_End
@@ -188,6 +200,7 @@ jobs:
             qt_host: mac
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
+            args: "--mirror https://download.qt.io/new_archive/qt"
 
           - os: macos-14
             name: macOS-Legacy
@@ -196,6 +209,7 @@ jobs:
             qt_host: mac
             qt_version: "5.15.2"
             qt_modules: "qtnetworkauth"
+            args: ""
 
           - os: macos-14
             name: macOS
@@ -205,6 +219,7 @@ jobs:
             qt_arch: ""
             qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
+            args: ""
 
     runs-on: ${{ matrix.os }}
 
@@ -317,6 +332,7 @@ jobs:
           cache-key-prefix: host-qt-arm64-windows
           dir: ${{ github.workspace }}\HostQt
           set-env: false
+          extra: ${{ matrix.args }}
 
       - name: Install Qt (macOS, Linux & Windows MSVC)
         if: matrix.msystem == ''
@@ -330,6 +346,7 @@ jobs:
           modules: ${{ matrix.qt_modules }}
           tools: ${{ matrix.qt_tools }}
           cache: ${{ inputs.is_qt_cached }}
+          extra: ${{ matrix.args }}
 
       - name: Install MSVC (Windows MSVC)
         if: runner.os == 'Windows' # We want this for MinGW builds as well, as we need SignTool
