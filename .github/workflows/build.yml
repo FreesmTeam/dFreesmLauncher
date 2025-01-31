@@ -52,7 +52,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-20.04-Dead_End
+            qt_ver: 5
+            qt_host: linux
+            qt_arch: ""
+            qt_version: "5.6.3"
+            qt_modules: "qtnetworkauth"
+
+          - os: ubuntu-20.04-Legacy
             qt_ver: 5
             qt_host: linux
             qt_arch: ""
@@ -67,7 +74,17 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
 
           - os: windows-2022
-            name: "Windows-MinGW-w64"
+            name: "Windows-MinGW-w64-Dead_End"
+            msystem: clang64
+            vcvars_arch: "amd64_x86"
+            qt_ver: 6
+            qt_host: windows
+            qt_arch: ""
+            qt_version: "5.6.3"
+            qt_modules: "qtnetworkauth"
+
+          - os: windows-2022
+            name: "Windows-MinGW-w64-Legacy"
             msystem: clang64
             vcvars_arch: "amd64_x86"
             qt_ver: 6
@@ -87,7 +104,20 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
 
           - os: windows-2022
-            name: "Windows-MSVC"
+            name: "Windows-MSVC-Dead_End"
+            msystem: ""
+            architecture: "x64"
+            vcvars_arch: "amd64"
+            qt_ver: 5
+            qt_host: windows
+            qt_arch: ""
+            qt_version: "5.6.3"
+            qt_modules: "qtnetworkauth"
+            nscurl_tag: "v24.9.26.122"
+            nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+
+          - os: windows-2022
+            name: "Windows-MSVC-Legacy"
             msystem: ""
             architecture: "x64"
             vcvars_arch: "amd64"
@@ -113,7 +143,20 @@ jobs:
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
 
           - os: windows-2022
-            name: "Windows-MSVC-arm64"
+            name: "Windows-MSVC-arm64-Dead_End"
+            msystem: ""
+            architecture: "arm64"
+            vcvars_arch: "amd64_arm64"
+            qt_ver: 5
+            qt_host: windows
+            qt_arch: "win64_msvc2019_arm64"
+            qt_version: "5.6.3"
+            qt_modules: "qtnetworkauth"
+            nscurl_tag: "v24.9.26.122"
+            nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+
+          - os: windows-2022
+            name: "Windows-MSVC-arm64-Legacy"
             msystem: ""
             architecture: "arm64"
             vcvars_arch: "amd64_arm64"
@@ -137,6 +180,22 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+
+          - os: macos-14
+            name: macOS-Legacy-Dead_End
+            macosx_deployment_target: 10.13
+            qt_ver: 5
+            qt_host: mac
+            qt_version: "5.6.3"
+            qt_modules: "qtnetworkauth"
+
+          - os: macos-14
+            name: macOS-Legacy
+            macosx_deployment_target: 10.13
+            qt_ver: 5
+            qt_host: mac
+            qt_version: "5.15.2"
+            qt_modules: "qtnetworkauth"
 
           - os: macos-14
             name: macOS
@@ -146,14 +205,6 @@ jobs:
             qt_arch: ""
             qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
-
-          - os: macos-14
-            name: macOS-Legacy
-            macosx_deployment_target: 10.13
-            qt_ver: 5
-            qt_host: mac
-            qt_version: "5.15.2"
-            qt_modules: "qtnetworkauth"
 
     runs-on: ${{ matrix.os }}
 
@@ -253,7 +304,7 @@ jobs:
 
       - name: Install host Qt (Windows MSVC arm64)
         if: runner.os == 'Windows' && matrix.architecture == 'arm64'
-        uses: jurplel/install-qt-action@v4.1.1
+        uses: jurplel/install-qt-action@v3
         with:
           aqtversion: "==3.1.*"
           py7zrversion: ">=0.20.2"
