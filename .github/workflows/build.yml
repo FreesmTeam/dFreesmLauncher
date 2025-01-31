@@ -9,7 +9,7 @@ on:
         default: Debug
       is_qt_cached:
         description: Enable Qt caching or not
-        type: string
+        type: boolean
         default: true
     secrets:
       SPARKLE_ED25519_KEY:
@@ -63,13 +63,41 @@ jobs:
             qt_ver: 6
             qt_host: linux
             qt_arch: ""
-            qt_version: "6.5.3"
+            qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
 
           - os: windows-2022
             name: "Windows-MinGW-w64"
             msystem: clang64
             vcvars_arch: "amd64_x86"
+            qt_ver: 6
+            qt_host: windows
+            qt_arch: ""
+            qt_version: "5.15.2"
+            qt_modules: "qtnetworkauth"
+
+          - os: windows-2022
+            name: "Windows-MinGW-w64"
+            msystem: clang64
+            vcvars_arch: "amd64_x86"
+            qt_ver: 6
+            qt_host: windows
+            qt_arch: ""
+            qt_version: "6.8.1"
+            qt_modules: "qt5compat qtimageformats qtnetworkauth"
+
+          - os: windows-2022
+            name: "Windows-MSVC"
+            msystem: ""
+            architecture: "x64"
+            vcvars_arch: "amd64"
+            qt_ver: 5
+            qt_host: windows
+            qt_arch: ""
+            qt_version: "5.15.2"
+            qt_modules: "qtnetworkauth"
+            nscurl_tag: "v24.9.26.122"
+            nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
 
           - os: windows-2022
             name: "Windows-MSVC"
@@ -79,8 +107,21 @@ jobs:
             qt_ver: 6
             qt_host: windows
             qt_arch: ""
-            qt_version: "6.7.3"
+            qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
+            nscurl_tag: "v24.9.26.122"
+            nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
+
+          - os: windows-2022
+            name: "Windows-MSVC-arm64"
+            msystem: ""
+            architecture: "arm64"
+            vcvars_arch: "amd64_arm64"
+            qt_ver: 5
+            qt_host: windows
+            qt_arch: "win64_msvc2019_arm64"
+            qt_version: "5.15.2"
+            qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
 
@@ -92,7 +133,7 @@ jobs:
             qt_ver: 6
             qt_host: windows
             qt_arch: "win64_msvc2019_arm64"
-            qt_version: "6.7.3"
+            qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
@@ -103,7 +144,7 @@ jobs:
             qt_ver: 6
             qt_host: mac
             qt_arch: ""
-            qt_version: "6.7.3"
+            qt_version: "6.8.1"
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
 
           - os: macos-14
@@ -123,20 +164,19 @@ jobs:
       INSTALL_APPIMAGE_DIR: "install-appdir"
       BUILD_DIR: "build"
       CCACHE_VAR: ""
-      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
 
     steps:
       ##
       # PREPARE
       ##
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           submodules: "true"
 
       - name: "Setup MSYS2"
         if: runner.os == 'Windows' && matrix.msystem != ''
-        uses: msys2/setup-msys2@v2
+        uses: msys2/setup-msys2@v2.26.0
         with:
           msystem: ${{ matrix.msystem }}
           update: true
@@ -164,7 +204,7 @@ jobs:
 
       - name: Setup ccache
         if: (runner.os != 'Windows' || matrix.msystem == '') && inputs.build_type == 'Debug'
-        uses: hendrikmuhs/ccache-action@v1.2.14
+        uses: hendrikmuhs/ccache-action@v1.2.16
         with:
           key: ${{ matrix.os }}-qt${{ matrix.qt_ver }}-${{ matrix.architecture }}
 
@@ -213,7 +253,7 @@ jobs:
 
       - name: Install host Qt (Windows MSVC arm64)
         if: runner.os == 'Windows' && matrix.architecture == 'arm64'
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4.1.1
         with:
           aqtversion: "==3.1.*"
           py7zrversion: ">=0.20.2"
@@ -229,7 +269,7 @@ jobs:
 
       - name: Install Qt (macOS, Linux & Windows MSVC)
         if: matrix.msystem == ''
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4.1.1
         with:
           aqtversion: "==3.1.*"
           py7zrversion: ">=0.20.2"
@@ -242,7 +282,7 @@ jobs:
 
       - name: Install MSVC (Windows MSVC)
         if: runner.os == 'Windows' # We want this for MinGW builds as well, as we need SignTool
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@v1.13.0
         with:
           vsversion: 2022
           arch: ${{ matrix.vcvars_arch }}
@@ -265,7 +305,7 @@ jobs:
 
       - name: Setup java (macOS)
         if: runner.os == 'macOS'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.7.0
         with:
           distribution: "temurin"
           java-version: "17"
@@ -390,8 +430,8 @@ jobs:
           cd ${{ env.INSTALL_DIR }}
 
           if [ -n '${{ secrets.APPLE_NOTARIZE_PASSWORD }}' ]; then
-            ditto -c -k --sequesterRsrc --keepParent "Freesm Launcher.app" ../PrismLauncher.zip
-            xcrun notarytool submit ../PrismLauncher.zip \
+            ditto -c -k --sequesterRsrc --keepParent "Freesm Launcher.app" ../FreesmLauncher.zip
+            xcrun notarytool submit ../FreesmLauncher.zip \
               --wait --progress \
               --apple-id '${{ secrets.APPLE_NOTARIZE_APPLE_ID }}' \
               --team-id '${{ secrets.APPLE_NOTARIZE_TEAM_ID }}' \
@@ -401,14 +441,14 @@ jobs:
           else
             echo ":warning: Skipping notarization as credentials are not present." >> $GITHUB_STEP_SUMMARY
           fi
-          ditto -c -k --sequesterRsrc --keepParent "Freesm Launcher.app" ../PrismLauncher.zip
+          ditto -c -k --sequesterRsrc --keepParent "Freesm Launcher.app" ../FreesmLauncher.zip
 
       - name: Make Sparkle signature (macOS)
         if: matrix.name == 'macOS'
         run: |
           if [ '${{ secrets.SPARKLE_ED25519_KEY }}' != '' ]; then
             echo '${{ secrets.SPARKLE_ED25519_KEY }}' > ed25519-priv.pem
-            signature=$(/opt/homebrew/opt/openssl@3/bin/openssl pkeyutl -sign -rawin -in ${{ github.workspace }}/PrismLauncher.zip -inkey ed25519-priv.pem | openssl base64 | tr -d \\n)
+            signature=$(/opt/homebrew/opt/openssl@3/bin/openssl pkeyutl -sign -rawin -in ${{ github.workspace }}/FreesmLauncher.zip -inkey ed25519-priv.pem | openssl base64 | tr -d \\n)
             rm ed25519-priv.pem
             cat >> $GITHUB_STEP_SUMMARY << EOF
           ### Artifact Information :information_source:
@@ -450,7 +490,7 @@ jobs:
           if (Get-Content ./codesign.pfx){
             cd ${{ env.INSTALL_DIR }}
             # We ship the exact same executable for portable and non-portable editions, so signing just once is fine
-            SignTool sign /fd sha256 /td sha256 /f ../codesign.pfx /p '${{ secrets.WINDOWS_CODESIGN_PASSWORD }}' /tr http://timestamp.digicert.com prismlauncher.exe prismlauncher_updater.exe prismlauncher_filelink.exe 
+            SignTool sign /fd sha256 /td sha256 /f ../codesign.pfx /p '${{ secrets.WINDOWS_CODESIGN_PASSWORD }}' /tr http://timestamp.digicert.com Freesmlauncher.exe Freesmlauncher_updater.exe Freesmlauncher_filelink.exe
           } else {
             ":warning: Skipped code signing for Windows, as certificate was not present." >> $env:GITHUB_STEP_SUMMARY
           }
@@ -504,10 +544,10 @@ jobs:
         run: |
           cmake --install ${{ env.BUILD_DIR }} --prefix ${{ env.INSTALL_APPIMAGE_DIR }}/usr
 
-          mv ${{ env.INSTALL_APPIMAGE_DIR }}/usr/share/metainfo/org.freesmTeam.freesmlauncher.metainfo.xml ${{ env.INSTALL_APPIMAGE_DIR }}/usr/share/metainfo/org.prismlauncher.PrismLauncher.appdata.xml
+          mv ${{ env.INSTALL_APPIMAGE_DIR }}/usr/share/metainfo/org.freesmTeam.freesmlauncher.metainfo.xml ${{ env.INSTALL_APPIMAGE_DIR }}/usr/share/metainfo/org.Freesmlauncher.FreesmLauncher.appdata.xml
           export "NO_APPSTREAM=1" # we have to skip appstream checking because appstream on ubuntu 20.04 is outdated
 
-          export OUTPUT="PrismLauncher-Linux-x86_64.AppImage"
+          export OUTPUT="FreesmLauncher-Linux-x86_64.AppImage"
 
           chmod +x linuxdeploy-*.AppImage
 
@@ -526,7 +566,7 @@ jobs:
           chmod +x AppImageUpdate-x86_64.AppImage
           cp AppImageUpdate-x86_64.AppImage ${{ env.INSTALL_APPIMAGE_DIR }}/usr/bin
 
-          export UPDATE_INFORMATION="gh-releases-zsync|${{ github.repository_owner }}|${{ github.event.repository.name }}|latest|PrismLauncher-Linux-x86_64.AppImage.zsync" 
+          export UPDATE_INFORMATION="gh-releases-zsync|${{ github.repository_owner }}|${{ github.event.repository.name }}|latest|FreesmLauncher-Linux-x86_64.AppImage.zsync"
 
           if [ '${{ secrets.GPG_PRIVATE_KEY_ID }}' != '' ]; then
             export SIGN=1
@@ -540,7 +580,7 @@ jobs:
 
           ./linuxdeploy-x86_64.AppImage --appdir ${{ env.INSTALL_APPIMAGE_DIR }} --output appimage --plugin qt -i ${{ env.INSTALL_APPIMAGE_DIR }}/usr/share/icons/hicolor/scalable/apps/org.freesmTeam.freesmlauncher.svg
 
-          mv "PrismLauncher-Linux-x86_64.AppImage" "PrismLauncher-Linux-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage"
+          mv "FreesmLauncher-Linux-x86_64.AppImage" "FreesmLauncher-Linux-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage"
 
       - name: Package (Linux, portable)
         if: runner.os == 'Linux'
@@ -559,7 +599,7 @@ jobs:
 
           for l in $(find ${{ env.INSTALL_PORTABLE_DIR }} -type f); do l=${l#$(pwd)/}; l=${l#${{ env.INSTALL_PORTABLE_DIR }}/}; l=${l#./}; echo $l; done > ${{ env.INSTALL_PORTABLE_DIR }}/manifest.txt
           cd ${{ env.INSTALL_PORTABLE_DIR }}
-          tar -czf ../PrismLauncher-portable.tar.gz *
+          tar -czf ../FreesmLauncher-portable.tar.gz *
 
       ##
       # UPLOAD BUILDS
@@ -569,57 +609,57 @@ jobs:
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher.zip
+          name: FreesmLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: FreesmLauncher.zip
 
       - name: Upload binary zip (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name }}-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_DIR }}/**
 
       - name: Upload binary zip (Windows, portable)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ matrix.name }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name }}-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
           path: ${{ env.INSTALL_PORTABLE_DIR }}/**
 
       - name: Upload installer (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ matrix.name }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
+          name: FreesmLauncher-${{ matrix.name }}-Setup-${{ env.VERSION }}-${{ inputs.build_type }}
           path: FreesmLauncher-Setup.exe
 
       - name: Upload binary tarball (Linux, portable, Qt 5)
         if: runner.os == 'Linux' && matrix.qt_ver != 6
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ runner.os }}-Qt5-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher-portable.tar.gz
+          name: FreesmLauncher-${{ runner.os }}-Qt5-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: FreesmLauncher-portable.tar.gz
 
       - name: Upload binary tarball (Linux, portable, Qt 6)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ runner.os }}-Qt6-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
-          path: PrismLauncher-portable.tar.gz
+          name: FreesmLauncher-${{ runner.os }}-Qt6-Portable-${{ env.VERSION }}-${{ inputs.build_type }}
+          path: FreesmLauncher-portable.tar.gz
 
       - name: Upload AppImage (Linux)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
-          path: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
+          name: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
+          path: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage
 
       - name: Upload AppImage Zsync (Linux)
         if: runner.os == 'Linux' && matrix.qt_ver != 5
         uses: actions/upload-artifact@v4
         with:
-          name: PrismLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage.zsync
-          path: PrismLauncher-Linux-x86_64.AppImage.zsync
+          name: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-${{ inputs.build_type }}-x86_64.AppImage.zsync
+          path: FreesmLauncher-Linux-x86_64.AppImage.zsync
 
       - name: ccache stats (Windows MinGW-w64)
         if: runner.os == 'Windows' && matrix.msystem != ''
@@ -645,7 +685,7 @@ jobs:
 
       - name: Build Flatpak (Linux)
         if: inputs.build_type == 'Debug'
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6.3
         with:
           bundle: FreesmLauncher-${{ runner.os }}-${{ env.VERSION }}-Flatpak.flatpak
           manifest-path: flatpak/org.freesmTeam.freesmlauncher.yml
