@@ -58,7 +58,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
-            args: "--base https://download.qt.io/new_archive/qt"
+            args: "--base https://download.qt.io/archive/qt"
 
           - os: ubuntu-20.04-Legacy
             qt_ver: 5
@@ -85,7 +85,7 @@ jobs:
             qt_arch: ""
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
-            args: "--base https://download.qt.io/new_archive/qt"
+            args: "--base https://download.qt.io/archive/qt"
 
           - os: windows-2022
             name: "Windows-MinGW-w64-Legacy"
@@ -121,7 +121,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
-            args: "--base https://download.qt.io/new_archive/qt"
+            args: "--base https://download.qt.io/archive/qt"
 
           - os: windows-2022
             name: "Windows-MSVC-Legacy"
@@ -163,7 +163,7 @@ jobs:
             qt_modules: "qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
-            args: "--base https://download.qt.io/new_archive/qt"
+            args: "--base https://download.qt.io/archive/qt"
 
           - os: windows-2022
             name: "Windows-MSVC-arm64-Legacy"
@@ -200,7 +200,7 @@ jobs:
             qt_host: mac
             qt_version: "5.6.3"
             qt_modules: "qtnetworkauth"
-            args: "--base https://download.qt.io/new_archive/qt"
+            args: "--base https://download.qt.io/archive/qt"
 
           - os: macos-14
             name: macOS-Legacy
