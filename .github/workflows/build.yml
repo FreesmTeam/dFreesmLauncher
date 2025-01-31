@@ -320,8 +320,62 @@ jobs:
           brew update
           brew install ninja extra-cmake-modules
 
+      - name: Build Qt 5.6.3 (Linux)
+        if: runner.os == 'Linux' && matrix.qt_version == '5.6.3'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential perl python git
+          git clone --branch 5.6.3 https://github.com/DrovioHQ/Qt.git
+          cd Qt
+          git submodule update --init --recursive
+          ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
+          make -j$(nproc)
+          make install
+
+      - name: Build Qt 5.6.3 (Windows)
+        if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; `
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
+          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+          choco install -y git visualstudio2013community
+
+          git clone --branch 5.6.3 https://github.com/DrovioHQ/Qt.git
+          cd Qt
+          git submodule update --init --recursive
+          configure -prefix ${{ github.workspace }}\HostQt -opensource -confirm-license -nomake examples -nomake tests
+          nmake
+          nmake install
+
+      - name: Build Qt 5.6.3 (MacOS)
+        if: runner.os == 'macOS' && matrix.qt_version == '5.6.3'
+        run: |
+          xcode-select --install
+          brew install git
+
+          git clone --branch 5.6.3 https://github.com/DrovioHQ/Qt.git
+          cd Qt
+          git submodule update --init --recursive
+          ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
+          make -j$(sysctl -n hw.ncpu)
+          make install
+
+      - name: Cache Qt (Linux & macOS)
+        if: runner.os == 'Linux' && matrix.qt_version == '5.6.3'
+        uses: actions/cache@v4.2.0
+        with:
+          path: ${{ github.workspace }}/HostQt
+          key: qt-5.6.3-${{ github.run_id }}
+
+      - name: Cache Qt (Windows)
+        if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
+        uses: actions/cache@v4.2.0
+        with:
+          path: ${{ github.workspace }}\HostQt
+          key: qt-5.6.3-${{ github.run_id }}
+
       - name: Install host Qt (Windows MSVC arm64)
-        if: runner.os == 'Windows' && matrix.architecture == 'arm64'
+        if: runner.os == 'Windows' && matrix.architecture == 'arm64' && matrix.qt_version != '5.6.3'
         uses: jurplel/install-qt-action@v3
         with:
           aqtversion: "==3.1.*"
@@ -338,7 +392,7 @@ jobs:
           extra: ${{ matrix.args }}
 
       - name: Install Qt (macOS, Linux & Windows MSVC)
-        if: matrix.msystem == ''
+        if: matrix.msystem == '' && matrix.qt_version != '5.6.3'
         uses: jurplel/install-qt-action@v4.1.1
         with:
           aqtversion: "==3.1.*"
