@@ -302,19 +302,6 @@ jobs:
           brew update
           brew install ninja extra-cmake-modules
 
-      - name: Build Qt 5.6.3 (Linux)
-        if: runner.os == 'Linux' && matrix.qt_version == '5.6.3'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libxcb1-dev libxcb-util0-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev
-
-          git clone https://github.com/lighterowl/qt563xp.git
-          cd qt563xp
-          git submodule update --init --recursive
-          ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
-          make -j$(nproc)
-          make install
-
       - name: Build Qt 5.6.3 (Windows)
         if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
         run: |
@@ -329,26 +316,6 @@ jobs:
           .\configure.bat -prefix ${{ github.workspace }}\HostQt -opensource -confirm-license -nomake examples -nomake tests
           nmake
           nmake install
-
-      - name: Build Qt 5.6.3 (MacOS)
-        if: runner.os == 'macOS' && matrix.qt_version == '5.6.3'
-        run: |
-          xcode-select --install || echo "OK"
-          brew install git
-
-          git clone https://github.com/lighterowl/qt563xp.git
-          cd qt563xp
-          git submodule update --init --recursive
-          ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
-          make -j$(sysctl -n hw.ncpu)
-          make install
-
-      - name: Cache Qt (Linux & macOS)
-        if: runner.os == 'Linux' && matrix.qt_version == '5.6.3'
-        uses: actions/cache@v4.2.0
-        with:
-          path: ${{ github.workspace }}/HostQt
-          key: qt-5.6.3-${{ github.run_id }}
 
       - name: Cache Qt (Windows)
         if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
