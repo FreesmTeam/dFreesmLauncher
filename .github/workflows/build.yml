@@ -326,7 +326,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libxcb1-dev libxcb-util0-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev
 
-          git clone https://github.com/DrovioHQ/Qt.git
+          git clone https://github.com/lighterowl/qt563xp.git
           cd Qt
           git submodule update --init --recursive
           ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
@@ -341,7 +341,7 @@ jobs:
           iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
           choco install -y git visualstudio2013community
 
-          git clone https://github.com/DrovioHQ/Qt.git
+          git clone https://github.com/lighterowl/qt563xp.git
           cd Qt
           git submodule update --init --recursive
           .\configure.bat -prefix ${{ github.workspace }}\HostQt -opensource -confirm-license -nomake examples -nomake tests
@@ -354,7 +354,7 @@ jobs:
           xcode-select --install || echo "OK"
           brew install git
 
-          git clone https://github.com/DrovioHQ/Qt.git
+          git clone https://github.com/lighterowl/qt563xp.git
           cd Qt
           git submodule update --init --recursive
           ./configure -prefix ${{ github.workspace }}/HostQt -opensource -confirm-license -nomake examples -nomake tests
