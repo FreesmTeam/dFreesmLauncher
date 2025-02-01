@@ -53,15 +53,6 @@ jobs:
       matrix:
         include:
           - os: ubuntu-20.04
-            name: "Ubuntu-20.04-Dead_End"
-            qt_ver: 5
-            qt_host: linux
-            qt_arch: ""
-            qt_version: "5.6.3"
-            qt_modules: "qtnetworkauth"
-            args: ""
-
-          - os: ubuntu-20.04
             name: "Ubuntu-20.04-Legacy"
             qt_ver: 5
             qt_host: linux
@@ -194,15 +185,6 @@ jobs:
             qt_modules: "qt5compat qtimageformats qtnetworkauth"
             nscurl_tag: "v24.9.26.122"
             nscurl_sha256: "AEE6C4BE3CB6455858E9C1EE4B3AFE0DB9960FA03FE99CCDEDC28390D57CCBB0"
-            args: ""
-
-          - os: macos-14
-            name: macOS-Legacy-Dead_End
-            macosx_deployment_target: 10.13
-            qt_ver: 5
-            qt_host: mac
-            qt_version: "5.6.3"
-            qt_modules: "qtnetworkauth"
             args: ""
 
           - os: macos-14
