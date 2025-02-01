@@ -4,10 +4,20 @@ on: [push, pull_request]
 
 jobs:
   commitlint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-      - name: Validate Commits with Commitlint
-        uses: joberstein/actions-commitlint-validation@v1-dist
+          node-version: 20
+
+      - name: Install commitlint
+        run: |
+          npm install -g @commitlint/cli @commitlint/config-conventional
+
+      - name: Run commitlint
+        run: |
+          commitlint --from ${{ github.event.before }} --to ${{ github.event.after }}
+
