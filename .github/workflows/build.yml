@@ -350,7 +350,7 @@ jobs:
       - name: Build Qt 5.6.3 (MacOS)
         if: runner.os == 'macOS' && matrix.qt_version == '5.6.3'
         run: |
-          xcode-select --install
+          xcode-select --install || echo "OK"
           brew install git
 
           git clone https://github.com/DrovioHQ/Qt.git
