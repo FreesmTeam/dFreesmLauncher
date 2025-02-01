@@ -316,7 +316,6 @@ jobs:
           git submodule update --init --recursive
           .\configure.bat -prefix ${{ github.workspace }}\HostQt -opensource -confirm-license -nomake examples -nomake tests
           cmake -G "MinGW Makefiles" --build .
-          cmake -G "MinGW Makefiles" --install .
 
       - name: Cache Qt (Windows)
         if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
