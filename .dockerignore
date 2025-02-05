@@ -1,0 +1,58 @@
+Thumbs.db
+*.kdev4
+.user
+.directory
+resources/CMakeFiles
+*~
+*.swp
+html/
+
+# Project Files
+*.pro.user
+CMakeLists.txt.user
+CMakeLists.txt.user.*
+CMakeSettings.json
+/CMakeFiles
+CMakeCache.txt
+/.project
+/.settings
+/.idea
+/.vscode
+/.vs
+cmake-build-*/
+Debug
+
+# Build dirs
+build
+/build-*
+
+# Install dirs
+install
+/install-*
+
+# Ctags File
+tags
+
+# YouCompleteMe config stuff.
+.ycm_extra_conf.*
+
+#OSX Stuff
+.DS_Store
+
+branding/
+secrets/
+run/
+
+.cache/
+
+# Nix/NixOS
+.direnv/
+.pre-commit-config.yaml
+result
+
+# Flatpak
+.flatpak-builder
+flatbuild
+
+# Snap
+*.snap
