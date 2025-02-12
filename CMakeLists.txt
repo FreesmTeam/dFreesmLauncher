@@ -437,7 +437,7 @@ elseif(UNIX)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${Launcher_SVG} DESTINATION "${KDE_INSTALL_ICONDIR}/hicolor/scalable/apps")
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${Launcher_mrpack_MIMEInfo} DESTINATION ${KDE_INSTALL_MIMEDIR})
 
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/launcher/qtlogging.ini" DESTINATION "share/${Launcher_Name}")
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/qtlogging.ini" DESTINATION "share/${Launcher_Name}")
 
     if (INSTALL_BUNDLE STREQUAL full)
         set(PLUGIN_DEST_DIR "plugins")
@@ -456,7 +456,7 @@ elseif(UNIX)
     endif()
 
     # Install basic runner script if component "portable" is selected
-    configure_file(launcher/Launcher.in "${CMAKE_CURRENT_BINARY_DIR}/LauncherScript" @ONLY)
+    configure_file(src/Launcher.in "${CMAKE_CURRENT_BINARY_DIR}/LauncherScript" @ONLY)
     install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/LauncherScript" DESTINATION "." RENAME ${Launcher_Name} COMPONENT portable EXCLUDE_FROM_ALL)
 
 elseif(WIN32)
@@ -564,4 +564,4 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 # NOTE: this must always be last to appease the CMake deity of quirky install command evaluation order.
-add_subdirectory(launcher)
+add_subdirectory(src)
