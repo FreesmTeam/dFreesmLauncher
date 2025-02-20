@@ -232,7 +232,7 @@ Application::Application(int& argc, char** argv) : QApplication(argc, argv)
     setDesktopFileName(BuildConfig.LAUNCHER_DESKTOPFILENAME);
     startTime = QDateTime::currentDateTime();
 
-// Don't quit on hiding the last window
+    // Don't quit on hiding the last window
     this->setQuitOnLastWindowClosed(false);
     this->setQuitLockEnabled(false);
 
@@ -512,32 +512,40 @@ Application::Application(int& argc, char** argv) : QApplication(argc, argv)
     }
 
     {
+        // lambda func wrap with formatting
+        auto debugKey = [](const QString& key, const QString& value) { qDebug() << qPrintable(key + " : " + value); };
+
         qDebug() << qPrintable(BuildConfig.LAUNCHER_DISPLAYNAME + ", " + QString(BuildConfig.LAUNCHER_COPYRIGHT).replace("\n", ", "));
-        qDebug() << "Version                    : " << BuildConfig.printableVersionString();
-        qDebug() << "Platform                   : " << BuildConfig.BUILD_PLATFORM;
-        qDebug() << "Git commit                 : " << BuildConfig.GIT_COMMIT;
-        qDebug() << "Git refspec                : " << BuildConfig.GIT_REFSPEC;
-        qDebug() << "Compiled for               : " << BuildConfig.systemID();
-        qDebug() << "Compiled by                : " << BuildConfig.compilerID();
-        qDebug() << "Build Artifact             : " << BuildConfig.BUILD_ARTIFACT;
-        qDebug() << "Updates Enabled           : " << (updaterEnabled() ? "Yes" : "No");
-        if (adjustedBy.size()) {
-            qDebug() << "Work dir before adjustment : " << origcwdPath;
-            qDebug() << "Work dir after adjustment  : " << QDir::currentPath();
-            qDebug() << "Adjusted by                : " << adjustedBy;
+
+        debugKey("Version", BuildConfig.printableVersionString());
+        debugKey("Platform", BuildConfig.BUILD_PLATFORM);
+        debugKey("Git commit", BuildConfig.GIT_COMMIT);
+        debugKey("Git refspec", BuildConfig.GIT_REFSPEC);
+        debugKey("Compiled for", BuildConfig.systemID());
+        debugKey("Compiled by", BuildConfig.compilerID());
+        debugKey("Build Artifact", BuildConfig.BUILD_ARTIFACT);
+        debugKey("Updates Enabled", updaterEnabled() ? "Yes" : "No");
+
+        if (!adjustedBy.isEmpty()) {
+            debugKey("Work dir before adjustment", origcwdPath);
+            debugKey("Work dir after adjustment", QDir::currentPath());
+            debugKey("Adjusted by", adjustedBy);
         } else {
-            qDebug() << "Work dir                   : " << QDir::currentPath();
+            debugKey("Work dir", QDir::currentPath());
         }
-        qDebug() << "Binary path                : " << binPath;
-        qDebug() << "Application root path      : " << m_rootPath;
+
+        debugKey("Binary path", binPath);
+        debugKey("Application root path", m_rootPath);
+
         if (!m_instanceIdToLaunch.isEmpty()) {
-            qDebug() << "ID of instance to launch   : " << m_instanceIdToLaunch;
+            debugKey("ID of instance to launch", m_instanceIdToLaunch);
         }
         if (!m_serverToJoin.isEmpty()) {
-            qDebug() << "Address of server to join  :" << m_serverToJoin;
+            debugKey("Address of server to join", m_serverToJoin);
         } else if (!m_worldToJoin.isEmpty()) {
-            qDebug() << "Name of the world to join  :" << m_worldToJoin;
+            debugKey("Name of the world to join", m_worldToJoin);
         }
+
         qDebug() << "<> Paths set.";
     }
 
