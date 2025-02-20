@@ -27,7 +27,7 @@
 
 class QDir;
 
-// Mod from launcher/minecraft/mod/Mod.h
+// Mod from src/minecraft/mod/Mod.h
 class Mod;
 
 namespace Packwiz {
