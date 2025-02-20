@@ -232,7 +232,7 @@ Application::Application(int& argc, char** argv) : QApplication(argc, argv)
     setDesktopFileName(BuildConfig.LAUNCHER_DESKTOPFILENAME);
     startTime = QDateTime::currentDateTime();
 
-    // Don't quit on hiding the last window
+// Don't quit on hiding the last window
     this->setQuitOnLastWindowClosed(false);
     this->setQuitLockEnabled(false);
 
@@ -246,9 +246,9 @@ Application::Application(int& argc, char** argv) : QApplication(argc, argv)
           { { "s", "server" }, "Join the specified server on launch (only valid in combination with --launch)", "address" },
           { { "w", "world" }, "Join the specified world on launch (only valid in combination with --launch)", "world" },
           { { "a", "profile" }, "Use the account specified by its profile name (only valid in combination with --launch)", "profile" },
-          { "alive", "Write a small '" + liveCheckFile + "' file after the launcher starts" },
+          { { "A", "alive" }, "Write a small '" + liveCheckFile + "' file after the launcher starts" },
           { { "I", "import" }, "Import instance or resource from specified local path or URL", "url" },
-          { "show", "Opens the window for the specified instance (by instance ID)", "show" } });
+          { { "S", "show" }, "Opens the window for the specified instance (by instance ID)", "show" } });
     // Has to be positional for some OS to handle that properly
     parser.addPositionalArgument("URL", "Import the resource(s) at the given URL(s) (same as -I / --import)", "[URL...]");
 
