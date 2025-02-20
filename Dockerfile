@@ -32,12 +32,12 @@ WORKDIR /freesmlauncher
 # setup locales
 RUN apt update && \
   apt install -y locales && \
-  sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+  sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 C.UTF-8/' /etc/locale.gen && \
   locale-gen
 
-ENV LANGUAGE=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+ENV LANGUAGE=C.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 #############
 ### Cache ###
@@ -141,6 +141,7 @@ RUN \
   libmount1 \
   libselinux1 \
   libunistring-dev \
+  libopenal-dev \
   libblkid1 \
   openjdk-17-jdk \
   openjdk-17-jre \
