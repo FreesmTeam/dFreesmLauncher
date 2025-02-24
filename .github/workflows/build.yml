@@ -302,30 +302,8 @@ jobs:
           brew update
           brew install ninja extra-cmake-modules
 
-      - name: Build Qt 5.6.3 (Windows)
-        if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force; `
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
-          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-          choco install -y cmake
-
-          git clone https://github.com/lighterowl/qt563xp.git
-          cd qt563xp
-          git submodule update --init --recursive
-          .\configure.bat -prefix ${{ github.workspace }}\HostQt -opensource -confirm-license -nomake examples -nomake tests
-          cmake -G "MinGW Makefiles" --build .
-
-      - name: Cache Qt (Windows)
-        if: runner.os == 'Windows' && matrix.qt_version == '5.6.3'
-        uses: actions/cache@v4.2.0
-        with:
-          path: ${{ github.workspace }}\HostQt
-          key: qt-5.6.3-${{ github.run_id }}
-
       - name: Install host Qt (Windows MSVC arm64)
-        if: runner.os == 'Windows' && matrix.architecture == 'arm64' && matrix.qt_version != '5.6.3'
+        if: runner.os == 'Windows' && matrix.architecture == 'arm64'
         uses: jurplel/install-qt-action@v3
         with:
           aqtversion: "==3.1.*"
@@ -342,7 +320,7 @@ jobs:
           extra: ${{ matrix.args }}
 
       - name: Install Qt (macOS, Linux & Windows MSVC)
-        if: matrix.msystem == '' && matrix.qt_version != '5.6.3'
+        if: matrix.msystem == ''
         uses: jurplel/install-qt-action@v4.1.1
         with:
           aqtversion: "==3.1.*"
